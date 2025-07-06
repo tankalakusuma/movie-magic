@@ -1,9 +1,19 @@
 from flask import Flask, render_template, request, redirect, session, flash, url_for
 import hashlib
 import uuid
+import boto3
 
 app = Flask(__name__)
 app.secret_key = 'super-secret-key'
+dynamodb = boto3.resource('dynamodb',region_name='us-east-1') # e.g., 'ap-south-1'
+
+users_table = dynamodb. Table("user")
+
+bookings_table = dynamodb.Table("moviebooking")
+
+sns = boto3.client('sns', region_name='us-east-1')
+
+sns_topic_arn = 'arn:aws:sns:us-east-1:911167905203:movieticket.fifo'
 
 # -------- Mock Data --------
 mock_users = {}  # email: hashed_password
